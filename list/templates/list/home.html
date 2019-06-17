@@ -6,6 +6,7 @@
 <ul>
     {% for item in companyz %}
         <li><strong>{{ item.name }}</strong></li>
+        <li>{{ item.pk }}</li>
         <li>Ticker: {{ item.ticker }}</li>
         <li>CIK: {{ item.cik }}</li>
         <li>USER: {{ item.user }}</li>

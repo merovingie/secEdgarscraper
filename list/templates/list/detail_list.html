@@ -3,6 +3,18 @@
 {% block content %}
 <div class="container">
     <h1>{{ company.name }}</h1>
-    <h4 class="text-muted">{{ company.user.username }}</h4>
+    {% for object in all_statements %}
+        
+        <h5>Name: {{ object.type }}</h5>
+        <h3>year: {{ object.year }}</h3>
+        <li><a href="{{ object.url }}">Details about: {{ object.type }}</a></li>
+        
+    {% endfor %}
+
+    {% for object in all_data %}
+
+        <li>{{ object.key }} : {{ object.value }}</li>
+        
+    {% endfor %}
 </div>
 {% endblock %}

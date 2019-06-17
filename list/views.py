@@ -210,7 +210,7 @@ class Createlisting(generic.CreateView):
                     
                 else:            
                     print('We encountered an error.')
-                    
+
             #Creating DAtA into Database
             #Creating each header and rotating thru all data values
             print("HEADERSSSSS   ")
@@ -264,5 +264,13 @@ class Createlisting(generic.CreateView):
     
      
 class Detaillisting(generic.DetailView):
-    model = [Company, Statement, Statment_element_headers, Statement_element_section, Statement_element_data]
+    model = Company
     template_name = 'list/detail_list.html'
+
+    def get_context_data(self, *args, **kwargs):
+        context = super(Detaillisting, self).get_context_data(*args, **kwargs)
+        context['all_statements'] = Statement.objects.all()
+        context['all_data'] = Statement_element_data.objects.all()
+        print("hi there")
+        print(context)
+        return context
