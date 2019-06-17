@@ -1,0 +1,17 @@
+{% extends 'list/base.html' %}
+
+{% block content %}
+<ul>
+    {% for item in companyz %}
+        <li><strong>{{ item.name }}</strong></li>
+        <li>Ticker: {{ item.ticker }}</li>
+        <li>CIK: {{ item.cik }}</li>
+        <li>USER: {{ item.user }}</li>
+        {% for object in statementz %}
+        <li><a href="{{ object.url }}">Details about: {{ object.type }}</a></li>
+        {% endfor %}
+        <br>
+        <br>
+    {% endfor %}
+</ul>
+{% endblock %}

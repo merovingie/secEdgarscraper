@@ -1,0 +1,8 @@
+{% extends 'list/base.html' %}
+
+{% block content %}
+<div class="container">
+    <h1>{{ company.name }}</h1>
+    <h4 class="text-muted">{{ company.user.username }}</h4>
+</div>
+{% endblock %}
