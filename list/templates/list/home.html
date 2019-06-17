@@ -6,12 +6,13 @@
 <ul>
     {% for item in companyz %}
         <li><strong>{{ item.name }}</strong></li>
-        <li>{{ item.pk }}</li>
+        <li>PK: {{ item.pk }}</li>
         <li>Ticker: {{ item.ticker }}</li>
         <li>CIK: {{ item.cik }}</li>
         <li>USER: {{ item.user }}</li>
         {% for object in statementz %}
-        <li><a href="{{ object.url }}">Details about: {{ object.type }}</a></li>
+        <li><a href="{{ object.url }}"> Direct link to Sec Edgar: {{ object.type }}</a></li>
+        <a href="#"></a><button type="submit" class="btn btn-danger">details</button></a>
         {% endfor %}
         <br>
         <br>
