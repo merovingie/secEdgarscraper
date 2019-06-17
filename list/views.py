@@ -15,7 +15,6 @@ import sys
 def home(request):
     companyz = Company.objects.all()
     statementz = Statement.objects.all()
-    print(statementz)
     return render(request, 'list/home.html', context={'companyz': companyz, 'statementz':statementz})
 
 # Create your views here.
@@ -47,19 +46,14 @@ class Createlisting(generic.CreateView):
 
         #get Company CIK
         tik = form.data['ticker']
-        print(tik)
         URL = 'http://www.sec.gov/cgi-bin/browse-edgar?CIK={}&Find=Search&owner=exclude&action=getcompany'
         CIK_RE = re.compile(r'.*CIK=(\d{10}).*')
         f = requests.get(URL.format(tik), stream = True)
         results = CIK_RE.findall(f.text)
         if len(results):
             cik = results[0]
-            print(cik)
-        
-        #get Company name
-        # edgar = edgar.Edgar()
+
         cmp_name = self.edgar.getCompanyNameByCik(cik)
-        print(cmp_name)
         
         #create object in database
         company = Company(ticker=tik, cik=cik, name=cmp_name, user=self.request.user)
@@ -76,11 +70,9 @@ class Createlisting(generic.CreateView):
         # Creating filename and url structure
         BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
         path = os.path.join(BASE_DIR, 'static')
-        print(path)
         out_path = path + "/sec_edgar_filings/" + tik + "/10-K/"
         
         # creating object of class with path to the download and downloading the txt file which is too big to load without xml iteration && should look for alternative option than that
-        print(out_path)
         dl = Downloader(path)
 
         # download the latest one by adding the 1
@@ -90,14 +82,13 @@ class Createlisting(generic.CreateView):
         file_name = [f for f in os.listdir(out_path) if os.path.isfile(os.path.join(out_path, f))]
         switched_filename = file_name[0]
         switched_filename = switched_filename.replace('-', '').replace('.txt', '/index.json')
-        print(switched_filename)
-        print(file_name)
+
 
         # creating base url configuration, i can do a better job than this!!!
         bare_url = r"https://www.sec.gov/Archives/edgar/data/"
         base_url = r"https://www.sec.gov"
         documents_url = bare_url + str(results[0]) + "/" + switched_filename
-        print(documents_url) 
+ 
 
         #retreieve the files and get the summary
         content = requests.get(documents_url).json()
@@ -150,10 +141,9 @@ class Createlisting(generic.CreateView):
                 print(report.shortname.text)
                 print(report.menucategory.text)
                 print(report.position.text)
-                print('-'*50)
-                print("Here is the link, PAPA")
+
+                # creating a holder for the url since a Bug creating a different file path into the database!
                 redirect_url_to_statement = base_url + report.htmlfilename.text
-                print(redirect_url_to_statement)
                 
         # in case of multiple statements
         statements_url = []
@@ -220,6 +210,7 @@ class Createlisting(generic.CreateView):
                     
                 else:            
                     print('We encountered an error.')
+                    
             #Creating DAtA into Database
             #Creating each header and rotating thru all data values
             print("HEADERSSSSS   ")
